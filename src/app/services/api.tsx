@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const tmdbUrl = "https://api.themoviedb.org/3";
-const tmdbKey = process.env.Next_APP_TMDB_KEY;
+const tmdbKey = '7b67e0d94c7a1d07c0312bac151d88b0'
 
 const axiosClient = axios.create({ baseURL: tmdbUrl });
 
@@ -19,23 +19,29 @@ const handleAxiosError = (error: unknown) => {
 /**
  * Getting the popular movies...
  */
-export const getPopularMovies = async (selectedPage: number = 1) => {
-  try {
-    const { data } = await axiosClient({
-      method: "get",
-      url: "/movie/popular",
-      params: {
-        api_key: tmdbKey,
-        language: "en-US",
-        page: selectedPage,
-      },
-    });
-    return data;
-  } catch (error) {
-    return handleAxiosError(error);
-  }
+export const getPopularMovies = async (page: number) => {
+  const response = await axios.get(`${tmdbUrl}/movie/popular`, {
+    params: {
+      api_key: tmdbKey,
+      page,
+    },
+  });
+  return response.data;
 };
 
+
+/**
+ * Getting the MovieDetails...
+ */
+export const getMovieDetails = async (movieId: string) => {
+  const response = await axios.get(`${tmdbUrl}/movie/${movieId}`, {
+    params: {
+      api_key: tmdbKey,
+      language: 'en-US',
+    },
+  });
+  return response.data;
+};
 /**
  * Getting the top rated movies...
  */
@@ -120,20 +126,12 @@ export const getDiscoverMovies = async (sortBy: string, selectedPage: number, si
  * Getting the genres list...
  */
 export const getMovieGenres = async () => {
-  try {
-    const { data } = await axiosClient({
-      method: "get",
-      url: "/genre/movie/list",
-      params: {
-        api_key: tmdbKey,
-        language: "en-US",
-      },
-    });
-    console.log(data);
-    return data;
-  } catch (error) {
-    return handleAxiosError(error);
-  }
+  const response = await axios.get(`${tmdbUrl}/genre/movie/list`, {
+    params: {
+      api_key: tmdbKey,
+    },
+  });
+  return response.data.genres;
 };
 
 /**
@@ -216,22 +214,14 @@ export const getSimilarMovies = async (movieId: number) => {
 /**
  * Getting the movies on the basis of genres...
  */
-export const getMoviesByGenres = async (genreId: number, selectedPage: number = 1) => {
-  try {
-    const { data } = await axiosClient({
-      method: "get",
-      url: `/discover/movie/`,
-      params: {
-        api_key: tmdbKey,
-        language: "en-US",
-        with_genres: genreId,
-        page: selectedPage,
-      },
-    });
-    return data;
-  } catch (error) {
-    return handleAxiosError(error);
-  }
+export const getMoviesByGenres = async (genreId: string) => {
+  const response = await axios.get(`${tmdbUrl}/discover/movie`, {
+    params: {
+      api_key: tmdbKey,
+      with_genres: genreId,
+    },
+  });
+  return response.data.results;
 };
 
 /**

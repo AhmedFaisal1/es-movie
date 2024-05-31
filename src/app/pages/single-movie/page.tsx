@@ -1,42 +1,84 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
-/**
- * Components and layouts...
- */
-import {
-  MaxWidthLayout,
-  NavbarFooterIncluded,
-  OtherSection,
-  TopSection,
-  MovieContainer,
-} from "layouts";
 import {
   getSingleMovie,
   getSingleMovieCredits,
   getSimilarMovies,
-} from "services/api";
-import { truncateString } from "utils/truncateString";
-import { extractImgPoster } from "utils/extractImg";
+} from "@/app/services/api";
+import { truncateString } from "@/app/utils/truncateString";
+import { extractImgPoster } from "@/app/utils/extractImg";
 import { BsStarFill } from "react-icons/bs";
+import NavbarFooterIncluded from "@/app/layouts/NavbarFooterIncluded";
+import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
+import TopSection from "@/app/layouts/TopSection";
+import OtherSection from "@/app/layouts/OtherSection";
+import MovieContainer from "@/app/layouts/MovieContainer";
 
-const SingleMovie = () => {
-  const [singleMovie, setSingleMovie] = useState();
-  const [singleMovieCredits, setSingleMovieCredits] = useState();
-  const [similarMovies, setSimilarMovies] = useState();
-  const { movieId } = useParams();
+// Define types for your data
+interface Movie {
+  id: number;
+  title: string;
+  backdrop_path: string;
+  poster_path: string;
+  vote_average: number;
+  overview: string;
+  genres: { id: number; name: string }[];
+  release_date: string;
+  popularity: number;
+  revenue: number;
+  status: string;
+  runtime: number;
+  tagline: string;
+}
+
+interface Cast {
+  id: number;
+  original_name: string;
+  character: string;
+  profile_path: string;
+}
+
+interface Credits {
+  cast: Cast[];
+}
+
+interface SimilarMovie {
+  id: number;
+  title: string;
+  poster_path: string;
+  vote_average:number;
+}
+
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
+const fetchMovieData = async (movieId:string, endpoint:string) => {
+  const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/${endpoint}?api_key=${API_KEY}&language=en-US`);
+  if (!response.ok) throw new Error('Failed to fetch data');
+  return response.json();
+};
+
+const SingleMovie: React.FC = () => {
+  const [singleMovie, setSingleMovie] = useState<Movie | null>(null);
+  const [singleMovieCredits, setSingleMovieCredits] = useState<Credits | null>(null);
+  const [similarMovies, setSimilarMovies] = useState<SimilarMovie[] | null>(null);
+  const { movieId } = useParams<{ movieId: string }>();
+
   useEffect(() => {
     (async function () {
-      const result = await getSingleMovie(movieId);
-      const creditResult = await getSingleMovieCredits(movieId);
-      const { results: similarMoviesResult } = await getSimilarMovies(movieId);
-      result && setSingleMovie(result);
-      creditResult && setSingleMovieCredits(creditResult);
-      similarMoviesResult && setSimilarMovies(similarMoviesResult.slice(0, 10));
+      if (movieId) {
+        const id = parseInt(movieId, 10);
+        const result = await getSingleMovie(id);
+        const creditResult = await getSingleMovieCredits(id);
+        const { results: similarMoviesResult } = await getSimilarMovies(id);
+        result && setSingleMovie(result);
+        creditResult && setSingleMovieCredits(creditResult);
+        similarMoviesResult && setSimilarMovies(similarMoviesResult.slice(0, 10));
+      }
     })();
   }, [movieId]);
 
   if (!singleMovie) return null;
+
   return (
     <NavbarFooterIncluded>
       <div
@@ -86,7 +128,7 @@ const SingleMovie = () => {
             <div className="space-y-8">
               <h2 className="custom-section-title">All Casts</h2>
               <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4">
-                {singleMovieCredits.cast.slice(0, 16).map((singleCast) => {
+                {singleMovieCredits?.cast.slice(0, 16).map((singleCast) => {
                   return (
                     <div key={singleCast.id} className="space-y-2">
                       <div className="max-h-[320px] overflow-hidden rounded-md">
@@ -152,10 +194,6 @@ const SingleMovie = () => {
               <div className="space-y-2">
                 <h2 className="custom-minor-title">Tagline</h2>
                 <p>{singleMovie.tagline}</p>
-              </div>
-              <div className="space-y-2">
-                <h2 className="custom-minor-title">Runtime</h2>
-                <p>{singleMovie.runtime}</p>
               </div>
             </div>
           </div>

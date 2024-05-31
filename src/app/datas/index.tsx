@@ -5,7 +5,7 @@ export const navItems = [
   },
   {
     title: "Trending",
-    providedLink: "/trending",
+    providedLink: "/pages/trending",
   },
   {
     title: "Discover",
@@ -13,10 +13,10 @@ export const navItems = [
   },
   {
     title: "People",
-    providedLink: "/people",
+    providedLink: "/pages/people",
   },
   {
     title: "Genres",
-    providedLink: "/genres",
+    providedLink: "/pages/genres",
   },
 ];

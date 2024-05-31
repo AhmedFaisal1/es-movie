@@ -1,34 +1,26 @@
-'use client'
+'use client';
 import React, { useState } from "react";
 import Link from "next/link";
 import { FaSearch } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { navItems } from "@/app/datas/index";
-import { useSearchProvider } from "@/app/contexts/searchContext";
-import { useRouter } from "next/navigation"; 
+import SearchMovie from "@/app/components/SearchMovie";
+import { useRouter } from "next/router"; 
 
 const Navbar: React.FC = () => {
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [providedInput, setProvidedInput] = useState("");
-  const { updateSearchedKey } = useSearchProvider();
-  
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
-  };
-  
-  const handleSearch = () => {
-    updateSearchedKey(providedInput);
-    router.push("/search");
   };
 
   return (
     <>
       <div className="w-full flex items-center justify-between space-x-5 p-5 bg-black">
         <Link href="/">
-            <h4 className="uppercase font-AtypDisplayBold text-green-500">
-              MovieEBG
-            </h4>
+          <h4 className="uppercase font-AtypDisplayBold text-green-500">
+            MovieEBG
+          </h4>
         </Link>
         <div className="justify-between w-full space-x-5 hidden lg:flex">
           <ul className="flex items-center justify-center space-x-5">
@@ -41,20 +33,7 @@ const Navbar: React.FC = () => {
             ))}
           </ul>
           <div className="flex bg-gray-800 overflow-hidden rounded-md">
-            <input
-              type="text"
-              className="px-8 py-3 border-none outline-none bg-transparent"
-              placeholder="Search any movie..."
-              onChange={(e) => {
-                setProvidedInput(e.target.value);
-              }}
-            />
-            <button
-              className="bg-green-500 px-5 text-gray-900"
-              onClick={handleSearch}
-            >
-              <FaSearch />
-            </button>
+            <SearchMovie />
           </div>
         </div>
         <div

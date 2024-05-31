@@ -8,6 +8,6 @@ export const PATH = {
   PEOPLE: "/people",
   GENRES: "/genres",
   GENRE: "/genre",
-  SEARCH: "/search",
+  SEARCH: "/searchdetail",
   SHOWMOVIE: "/show/movie",
 };

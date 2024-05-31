@@ -1,25 +1,39 @@
+'use client'
 import React, { useEffect, useState } from "react";
+import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
+import NavbarFooterIncluded from "@/app/layouts/NavbarFooterIncluded";
+import TopSection from "@/app/layouts/TopSection";
+import { getTrendingMovies } from "@/app/services/api";
+import SelectComponent from "@/app/components/SelectComponent";
+import Pagination from "@/app/components/Pagination";
+import MovieCard from "@/app/components/MovieCard";
 
-/**
- * Components and layouts...
- */
-import { MaxWidthLayout, NavbarFooterIncluded, TopSection } from "layouts";
-import { SelectComponent, Pagination, MovieCard } from "components";
-import { getMovieGenres, getTrendingMovies } from "services/api";
+interface Movie {
+  id: number;
+  title: string;
+  vote_average:number;
+}
 
-const Trending = () => {
-  const [trendingMovies, setTrendingMovies] = useState();
-  const [category, setCategory] = useState("movie");
-  const [dayWeek, setDayWeek] = useState("day");
-  const [selectedPage, setSelectedPage] = useState(1);
+interface TrendingMoviesResponse {
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+const Trending: React.FC = () => {
+  const [trendingMovies, setTrendingMovies] = useState<TrendingMoviesResponse | null>(null);
+  const [category, setCategory] = useState<string>("movie");
+  const [dayWeek, setDayWeek] = useState<string>("day");
+  const [selectedPage, setSelectedPage] = useState<number>(1);
+
   /**
-   * For pagnination...
+   * For pagination...
    */
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState<number>(0);
   const moviesPerPage = 20;
   const numberOfRecordsVisited = page * moviesPerPage;
   const totalPagesCalculated = Math.ceil(
-    trendingMovies?.total_results / moviesPerPage
+    (trendingMovies?.total_results || 0) / moviesPerPage
   );
 
   /**
@@ -40,13 +54,13 @@ const Trending = () => {
     },
   ];
 
-  const handleCategoryChange = (providedCategory) => {
+  const handleCategoryChange = (providedCategory: string) => {
     setCategory(providedCategory);
   };
-  const handleDayWeekChange = (providedDayWeek) => {
+  const handleDayWeekChange = (providedDayWeek: string) => {
     setDayWeek(providedDayWeek);
   };
-  const handlePageChange = (providedPage) => {
+  const handlePageChange = (providedPage: number) => {
     setSelectedPage(providedPage);
   };
 
@@ -57,12 +71,11 @@ const Trending = () => {
         total_pages,
         total_results,
       } = await getTrendingMovies(category, dayWeek, selectedPage);
-      trendingMoviesResults &&
-        setTrendingMovies({
-          trendingMoviesResults,
-          total_pages,
-          total_results,
-        });
+      setTrendingMovies({
+        results: trendingMoviesResults,
+        total_pages,
+        total_results,
+      });
     })();
   }, [category, dayWeek, selectedPage]);
 
@@ -89,7 +102,8 @@ const Trending = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5 md:gap-10">
-            {trendingMovies?.trendingMoviesResults
+            {trendingMovies?.results&&
+            trendingMovies.results
               .slice(
                 numberOfRecordsVisited,
                 numberOfRecordsVisited + moviesPerPage

@@ -1,14 +1,26 @@
 import React, { useEffect, useState } from "react";
+import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
+import NavbarFooterIncluded from "@/app/layouts/NavbarFooterIncluded";
+import TopSection from "@/app/layouts/TopSection";
+import MovieCard from "@/app/components/MovieCard";
+import Pagination from "@/app/components/Pagination";
+import { getUpcomingMovies } from "@/app/services/api";
 
-/**
- * Components and layouts...
- */
-import { MaxWidthLayout, NavbarFooterIncluded, TopSection } from "layouts";
-import { Pagination, MovieCard } from "components";
-import { getTopRatedMovies } from "services/api";
+interface Movie {
+  id: number;
+  title: string;
+  vote_average:number;
+  poster_path:string;
+}
 
-const TopRated = () => {
-  const [topRatedMovies, setTopRatedMovies] = useState();
+interface UpcomingMoviesResponse {
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+const Upcoming:React.FC = () => {
+  const [upcomingMovies, setUpcomingMovies] = useState<UpcomingMoviesResponse | null>(null);
   const [selectedPage, setSelectedPage] = useState(1);
   /**
    * For pagnination...
@@ -17,23 +29,23 @@ const TopRated = () => {
   const moviesPerPage = 20;
   const numberOfRecordsVisited = page * moviesPerPage;
   const totalPagesCalculated = Math.ceil(
-    topRatedMovies?.total_results / moviesPerPage
+    (upcomingMovies?.total_results || 0) / moviesPerPage
   );
 
-  const handlePageChange = (providedPage) => {
+  const handlePageChange = (providedPage:number) => {
     setSelectedPage(providedPage);
   };
 
   useEffect(() => {
     (async function () {
       const {
-        results: topRatedMoviesResults,
+        results: upcomingMoviesResults,
         total_pages,
         total_results,
-      } = await getTopRatedMovies(selectedPage);
-      topRatedMoviesResults &&
-        setTopRatedMovies({
-          topRatedMoviesResults,
+      } = await getUpcomingMovies(selectedPage);
+      upcomingMoviesResults &&
+        setUpcomingMovies({
+          results:upcomingMoviesResults,
           total_pages,
           total_results,
         });
@@ -51,7 +63,8 @@ const TopRated = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5 md:gap-10">
-            {topRatedMovies?.topRatedMoviesResults
+            {upcomingMovies?.results && 
+            upcomingMovies?.results
               .slice(
                 numberOfRecordsVisited,
                 numberOfRecordsVisited + moviesPerPage
@@ -77,4 +90,4 @@ const TopRated = () => {
   );
 };
 
-export default TopRated;
+export default Upcoming;

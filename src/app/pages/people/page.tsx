@@ -1,8 +1,5 @@
+'use client'
 import React, { useEffect, useState } from "react";
-
-/**
- * Components and layouts...
- */
 import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
 import NavbarFooterIncluded from "@/app/layouts/NavbarFooterIncluded";
 import TopSection from "@/app/layouts/TopSection";
