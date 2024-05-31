@@ -1,11 +1,9 @@
 import React from "react";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 const ShowMovie = () => {
-  const router = useRouter();
-
-  // You can access route parameters using useRouter hook
-  const { slug } = router.query;
+  const searchParams = useSearchParams();
+  const slug = searchParams.get('slug');
 
   return (
     <>

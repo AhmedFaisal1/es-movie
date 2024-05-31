@@ -214,11 +214,13 @@ export const getSimilarMovies = async (movieId: number) => {
 /**
  * Getting the movies on the basis of genres...
  */
-export const getMoviesByGenres = async (genreId: string) => {
+export const getMoviesByGenres = async (genreId: number, page: number) => {
   const response = await axios.get(`${tmdbUrl}/discover/movie`, {
     params: {
       api_key: tmdbKey,
       with_genres: genreId,
+      page: page,
+      language: 'en-US',
     },
   });
   return response.data.results;

@@ -10,11 +10,12 @@ import MovieCard from "@/app/components/MovieCard";
 import TopSection from "@/app/layouts/TopSection";
 import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
 import { getMoviesByGenres } from "@/app/services/api";
+
 type Movie = {
   id: number;
   title: string;
   vote_average: number;
-  // Add other relevant movie properties here
+  poster_path: string;
 };
 
 type DiscoverMoviesResponse = {
