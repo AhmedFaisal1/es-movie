@@ -8,6 +8,5 @@ export { default as TopRated } from "@/app/pages/top-rated/page";
 export { default as ShowMovie } from "@/app/pages/show-movie/page";
 export { default as SingleMovie } from "@/app/pages/single-movie/page";
 export { default as Genres } from "@/app/pages/genres/page";
-export { default as ShowGenre } from "@/app/pages/show-genre/page";
 export { default as SingleGenre } from "@/app/pages/single-genre/page";
 export { default as SearchMovie } from "@/app/pages/searchdetail/page";
