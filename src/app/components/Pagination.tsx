@@ -1,7 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactPaginate from "react-paginate";
 
-const Pagination = ({ totalPagesCalculated, handlePageChange }) => {
+interface PaginationProps {
+  totalPagesCalculated: number;
+  handlePageChange: (selected: number) => void;
+}
+
+const Pagination: React.FC<PaginationProps> = ({
+  totalPagesCalculated,
+  handlePageChange,
+}) => {
   return (
     <>
       <ReactPaginate
