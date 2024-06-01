@@ -11,9 +11,9 @@ export const revalidate = 60; // Optional: Revalidate at most once every 60 seco
 
 const Homepage = async () => {
   try {
-    const popularMovies = await getPopularMovies();
-    const topRatedMovies = await getTopRatedMovies();
-    const upcomingMovies = await getUpcomingMovies();
+    const popularMovies = await getPopularMovies(1); // Pass undefined as argument
+    const topRatedMovies = await getTopRatedMovies(1); // Pass undefined as argument
+    const upcomingMovies = await getUpcomingMovies(1); // Pass undefined as argument
 
     const popularMoviesList = popularMovies?.results?.slice(0, 10) || [];
     const topRatedMoviesList = topRatedMovies?.results?.slice(0, 10) || [];
