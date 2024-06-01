@@ -1,15 +1,15 @@
-import React from "react";
-/**
- * Components and layouts...
- */
-import { Outlet } from "react-router-dom";
+// import React from "react";
+// /**
+//  * Components and layouts...
+//  */
+// import { Outlet } from "react-router-dom";
 
-const ShowGenre = () => {
-  return (
-    <>
-      <Outlet />
-    </>
-  );
-};
+// const ShowGenre = () => {
+//   return (
+//     <>
+//       <Outlet />
+//     </>
+//   );
+// };
 
-export default ShowGenre;
+// export default ShowGenre;
