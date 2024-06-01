@@ -16,7 +16,7 @@ type Movie = {
   id: number;
   title: string;
   vote_average: number; 
-  // Add other relevant movie properties here
+  poster_path:string;
 };
 
 type Genre = {
