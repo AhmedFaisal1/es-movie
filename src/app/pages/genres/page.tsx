@@ -1,4 +1,5 @@
-'use client'
+/* eslint-disable @next/next/no-img-element */
+"use client";
 import React, { useEffect, useState } from "react";
 import { getMovieGenres, getMoviesByGenres } from "@/app/services/api";
 import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
@@ -18,7 +19,7 @@ interface Movie {
 
 const Genre = () => {
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
-  const [selectedGenre, setSelectedGenre] = useState<{ id: string | null; name: string | null }>({ id: null, name: null });
+  const [selectedGenre, setSelectedGenre] = useState<{ id: number | null; name: string | null }>({ id: null, name: null });
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loadingMovies, setLoadingMovies] = useState<boolean>(false);
 
@@ -34,10 +35,10 @@ const Genre = () => {
     })();
   }, []);
 
-  const fetchMovies = async (genreId: string) => {
+  const fetchMovies = async (genreId: number, page: number = 1) => {
     try {
       setLoadingMovies(true);
-      const movies = await getMoviesByGenres(genreId);
+      const { results: movies } = await getMoviesByGenres(genreId, page);
       setMovies(movies);
       setLoadingMovies(false);
     } catch (error) {
@@ -47,8 +48,8 @@ const Genre = () => {
   };
 
   const handleGenreClick = (genreId: number, genreName: string) => {
-    setSelectedGenre({ id: genreId.toString(), name: genreName });
-    fetchMovies(genreId.toString());
+    setSelectedGenre({ id: genreId, name: genreName });
+    fetchMovies(genreId);
   };
 
   return (
@@ -79,7 +80,7 @@ const Genre = () => {
               </div>
             ))}
           </div>
-          {selectedGenre.id && (
+          {selectedGenre.id !== null && (
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">{selectedGenre.name} Movies</h2>
               {loadingMovies ? (

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
 import { truncateString } from "@/app/utils/truncateString";

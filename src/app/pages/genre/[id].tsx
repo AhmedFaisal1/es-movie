@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
@@ -27,7 +28,7 @@ const GenreMovies = () => {
   const fetchMovies = async (genreId: string) => {
     try {
       setLoadingMovies(true);
-      const response = await getMoviesByGenres(genreId);
+      const response = await getMoviesByGenres(parseInt(genreId), 1);
       setMovies(response.results);
       setLoadingMovies(false);
     } catch (error) {

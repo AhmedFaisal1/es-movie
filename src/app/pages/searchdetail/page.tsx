@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useEffect, useState } from 'react';
 
@@ -29,7 +30,7 @@ const SearchDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-semibold mb-4">Search Results for "{query}"</h1>
+<h1 className="text-3xl font-semibold mb-4">Search Results for &quot;{query}&quot;</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {searchResults.map((movie: any) => (
           <div key={movie.id} className="bg-white rounded-md shadow-md p-4">
