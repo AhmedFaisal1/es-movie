@@ -1,15 +1,12 @@
-// import React from "react";
-// /**
-//  * Components and layouts...
-//  */
-// import { Outlet } from "react-router-dom";
+import React from 'react';
 
-// const ShowGenre = () => {
-//   return (
-//     <>
-//       <Outlet />
-//     </>
-//   );
-// };
+const ShowGenre = () => {
+  return (
+    <div>
+      <h1>Show Genre</h1>
+      {/* Add your genre-specific components here */}
+    </div>
+  );
+};
 
-// export default ShowGenre;
+export default ShowGenre;
