@@ -6,8 +6,8 @@ import { BsStarFill } from "react-icons/bs";
 import { extractImgPoster } from "../utils/extractImg";
 import MovieCard from "../components/MovieCard";
 
-// Define an interface for the movie object
-interface Movie {
+// Define an interface for the movie object within MovieContainer
+interface MovieContainerMovie {
   id: number;
   poster_path?: string;
   vote_average: number;
@@ -20,7 +20,7 @@ interface Movie {
 // Define an interface for the component props
 interface MovieContainerProps {
   sectionTitle: string;
-  moviesList: Movie[];
+  moviesList: MovieContainerMovie[]; // Use the local MovieContainerMovie interface
   btnText?: string;
   btnLink?: string;
 }
@@ -42,7 +42,11 @@ const MovieContainer: React.FC<MovieContainerProps> = ({
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5 md:gap-10">
           {moviesList?.map((singlePopularMovie) => (
             <MovieCard
-              singlePopularMovie={singlePopularMovie}
+              singlePopularMovie={{
+                ...singlePopularMovie,
+                poster_path: singlePopularMovie.poster_path || "", // Ensure poster_path is not undefined
+                title: singlePopularMovie.title || "", // Ensure title is not undefined
+              }}
               key={singlePopularMovie.id}
             />
           ))}
