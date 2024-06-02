@@ -1,6 +1,7 @@
-'use client'
-import React from 'react';
-import { useSearchParams } from 'next/navigation';
+"use client";
+
+import React, { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 
 const ShowMovie = () => {
   const searchParams = useSearchParams();
@@ -14,4 +15,10 @@ const ShowMovie = () => {
   );
 };
 
-export default ShowMovie;
+const ShowMovieWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <ShowMovie />
+  </Suspense>
+);
+
+export default ShowMovieWrapper;

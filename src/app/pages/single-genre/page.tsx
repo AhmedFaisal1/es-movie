@@ -1,11 +1,7 @@
-"use client"
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-
-/**
- * Components and layouts...
- */
-import NavbarFooterIncluded from '../../layouts/NavbarFooterIncluded';
+"use client";
+import React, { Suspense, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import NavbarFooterIncluded from "../../layouts/NavbarFooterIncluded";
 import Pagination from "@/app/components/Pagination";
 import MovieCard from "@/app/components/MovieCard";
 import TopSection from "@/app/layouts/TopSection";
@@ -27,22 +23,16 @@ type DiscoverMoviesResponse = {
 
 const SingleGenre = () => {
   const searchParams = useSearchParams();
-  const genreId = searchParams.get('genreId'); // Correctly get the 'genreId' parameter
+  const genreId = searchParams.get('genreId');
   const [discoverMovies, setDiscoverMovies] = useState<DiscoverMoviesResponse | undefined>();
   const [selectedPage, setSelectedPage] = useState<number>(1);
 
-  /**
-   * For pagination...
-   */
   const moviesPerPage = 20;
   const numberOfRecordsVisited = (selectedPage - 1) * moviesPerPage;
   const totalPagesCalculated = Math.ceil(
     (discoverMovies?.total_results ?? 0) / moviesPerPage
   );
 
-  /**
-   * Required functions ...
-   */
   const handlePageChange = (providedPage: number) => {
     setSelectedPage(providedPage);
   };
@@ -105,4 +95,10 @@ const SingleGenre = () => {
   );
 };
 
-export default SingleGenre;
+const SingleGenreWrapper = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <SingleGenre />
+  </Suspense>
+);
+
+export default SingleGenreWrapper;
