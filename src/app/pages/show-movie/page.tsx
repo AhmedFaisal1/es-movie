@@ -1,6 +1,6 @@
 'use client'
-import React from "react";
-import { useSearchParams } from "next/navigation";
+import React from 'react';
+import { useSearchParams } from 'next/navigation';
 
 const ShowMovie = () => {
   const searchParams = useSearchParams();

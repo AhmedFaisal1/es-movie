@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 
 /**
  * Components and layouts...
@@ -26,8 +26,8 @@ type DiscoverMoviesResponse = {
 };
 
 const SingleGenre = () => {
-  const router = useRouter();
-  const { genreId } = router.query as { genreId: string };
+  const searchParams = useSearchParams();
+  const genreId = searchParams.get('genreId'); // Correctly get the 'genreId' parameter
   const [discoverMovies, setDiscoverMovies] = useState<DiscoverMoviesResponse | undefined>();
   const [selectedPage, setSelectedPage] = useState<number>(1);
 
