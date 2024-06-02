@@ -214,16 +214,22 @@ export const getSimilarMovies = async (movieId: number) => {
 /**
  * Getting the movies on the basis of genres...
  */
-export const getMoviesByGenres = async (genreId: number, page: number) => {
-  const response = await axios.get(`${tmdbUrl}/discover/movie`, {
-    params: {
-      api_key: tmdbKey,
-      with_genres: genreId,
-      page: page,
-      language: 'en-US',
-    },
-  });
-  return response.data.results;
+export const getMoviesByGenres = async (genreId:number, selectedPage = 1) => {
+  try {
+    const { data } = await axiosClient({
+      method: "get",
+      url: `/discover/movie`,
+      params: {
+        api_key: tmdbKey,
+        language: "en-US",
+        with_genres: genreId,
+        page: selectedPage,
+      },
+    });
+    return data;
+  } catch (error) {
+    return handleAxiosError(error);
+  }
 };
 
 /**

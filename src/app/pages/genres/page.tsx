@@ -22,6 +22,7 @@ const Genre = () => {
   const [selectedGenre, setSelectedGenre] = useState<{ id: number | null; name: string | null }>({ id: null, name: null });
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loadingMovies, setLoadingMovies] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     (async function () {
@@ -31,6 +32,7 @@ const Genre = () => {
         setAllGenres(allGenresResults);
       } catch (error) {
         console.error('Error fetching genres:', error);
+        setError('Failed to load genres.');
       }
     })();
   }, []);
@@ -38,16 +40,27 @@ const Genre = () => {
   const fetchMovies = async (genreId: number, page: number = 1) => {
     try {
       setLoadingMovies(true);
-      const { results: movies } = await getMoviesByGenres(genreId, page);
-      setMovies(movies);
+      setError(null);
+      console.log(`Fetching movies for genre ID: ${genreId}, Page: ${page}`);
+      const response = await getMoviesByGenres(genreId, page);
+      console.log('Fetched movies response:', response);
+      if (response && response.results) {
+        setMovies(response.results);
+        console.log('Movies set in state:', response.results);
+      } else {
+        setMovies([]);
+        console.log('No movies found for this genre.');
+      }
       setLoadingMovies(false);
     } catch (error) {
       console.error('Error fetching movies:', error);
+      setError('Failed to load movies.');
       setLoadingMovies(false);
     }
   };
 
   const handleGenreClick = (genreId: number, genreName: string) => {
+    console.log(`Genre clicked: ${genreName} (ID: ${genreId})`);
     setSelectedGenre({ id: genreId, name: genreName });
     fetchMovies(genreId);
   };
@@ -85,16 +98,22 @@ const Genre = () => {
               <h2 className="text-2xl font-bold text-white mb-4">{selectedGenre.name} Movies</h2>
               {loadingMovies ? (
                 <p className="text-white">Loading movies...</p>
+              ) : error ? (
+                <p className="text-red-500">{error}</p>
               ) : (
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-                  {movies.map((movie) => (
-                    <div key={movie.id} className="bg-gray-800 rounded-lg overflow-hidden">
-                      <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} className="w-full h-90 object-cover" />
-                      <div className="p-4">
-                        <h3 className="text-lg font-bold text-white">{movie.title}</h3>
+                  {movies.length > 0 ? (
+                    movies.map((movie) => (
+                      <div key={movie.id} className="bg-gray-800 rounded-lg overflow-hidden">
+                        <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} className="w-full h-90 object-cover" />
+                        <div className="p-4">
+                          <h3 className="text-lg font-bold text-white">{movie.title}</h3>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-white">No movies found for this genre.</p>
+                  )}
                 </div>
               )}
             </div>

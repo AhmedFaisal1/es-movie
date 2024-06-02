@@ -1,12 +1,12 @@
-"use client";
-import React, { Suspense, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import NavbarFooterIncluded from "../../layouts/NavbarFooterIncluded";
-import Pagination from "@/app/components/Pagination";
-import MovieCard from "@/app/components/MovieCard";
-import TopSection from "@/app/layouts/TopSection";
-import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
-import { getMoviesByGenres } from "@/app/services/api";
+'use client';
+import React, { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import NavbarFooterIncluded from '../../layouts/NavbarFooterIncluded';
+import Pagination from '@/app/components/Pagination';
+import MovieCard from '@/app/components/MovieCard';
+import TopSection from '@/app/layouts/TopSection';
+import MaxWidthLayout from '@/app/layouts/MaxWidthLayout';
+import { getMoviesByGenres } from '@/app/services/api';
 
 type Movie = {
   id: number;
@@ -24,7 +24,7 @@ type DiscoverMoviesResponse = {
 const SingleGenre = () => {
   const searchParams = useSearchParams();
   const genreId = searchParams.get('genreId');
-  const [discoverMovies, setDiscoverMovies] = useState<DiscoverMoviesResponse | undefined>();
+  const [discoverMovies, setDiscoverMovies] = useState<DiscoverMoviesResponse | null>(null);
   const [selectedPage, setSelectedPage] = useState<number>(1);
 
   const moviesPerPage = 20;
@@ -47,12 +47,13 @@ const SingleGenre = () => {
             total_pages,
             total_results,
           }: DiscoverMoviesResponse = await getMoviesByGenres(genreIdNumber, selectedPage);
-          discoverMoviesResults &&
+          if (discoverMoviesResults) {
             setDiscoverMovies({
               results: discoverMoviesResults,
               total_pages,
               total_results,
             });
+          }
         }
       }
     })();
@@ -68,21 +69,23 @@ const SingleGenre = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5 md:gap-10">
-            {discoverMovies?.results
-              .slice(
-                numberOfRecordsVisited,
-                numberOfRecordsVisited + moviesPerPage
-              )
-              ?.map((singlePopularMovie: Movie) => {
-                return (
+          {discoverMovies ? (
+            <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5 md:gap-10">
+              {discoverMovies.results
+                .slice(
+                  numberOfRecordsVisited,
+                  numberOfRecordsVisited + moviesPerPage
+                )
+                .map((singlePopularMovie: Movie) => (
                   <MovieCard
                     key={singlePopularMovie.id}
                     singlePopularMovie={singlePopularMovie}
                   />
-                );
-              })}
-          </div>
+                ))}
+            </div>
+          ) : (
+            <div>Loading...</div>
+          )}
           <div>
             <Pagination
               totalPagesCalculated={totalPagesCalculated}
