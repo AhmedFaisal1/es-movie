@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from "react";
 import Link from "next/link";
-import { FaSearch } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { navItems } from "@/app/datas/index";
 import SearchMovie from "@/app/components/SearchMovie";
@@ -32,7 +31,7 @@ const Navbar: React.FC = () => {
               </li>
             ))}
           </ul>
-          <div className="flex bg-gray-800 overflow-hidden rounded-md">
+          <div className=" overflow-hidden rounded-md">
             <SearchMovie />
           </div>
         </div>

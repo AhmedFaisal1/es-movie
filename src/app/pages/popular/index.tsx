@@ -1,37 +1,39 @@
-'use client'
 import React, { useEffect, useState } from "react";
 
-import MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
-import NavbarFooterIncluded from "@/app/layouts/NavbarFooterIncluded";
-import TopSection from "@/app/layouts/TopSection";
-import MovieCard from "@/app/components/MovieCard";
-import Pagination from "@/app/components/Pagination";
-import { getTopRatedMovies } from "@/app/services/api";
+/**
+ * Components and layouts...
+ */
+import  MaxWidthLayout from "@/app/layouts/MaxWidthLayout";
+import   NavbarFooterIncluded   from "@/app/layouts/NavbarFooterIncluded";
+import  TopSection  from "@/app/layouts/TopSection";
+import  Pagination  from "@/app/components/Pagination";
+import MovieCard from '@/app/components/MovieCard'
+import  {getPopularMovies } from "@/app/services/api";
 
 interface Movie {
   id: number;
-  title: string;
-  vote_average:number;
-  poster_path:string;
+  poster_path?: string;
+  vote_average: number;
+  title?: string;
+  name?: string;
+  release_date?: string;
+  first_air_date?: string;
 }
 
-interface TopRatedMoviesResponse {
+interface PopularMoviesResponse {
   results: Movie[];
   total_pages: number;
   total_results: number;
 }
 
-const TopRated:React.FC = () => {
-  const [topRatedMovies, setTopRatedMovies] = useState<TopRatedMoviesResponse | null>(null);
+const Upcoming: React.FC = () => {
+  const [popularMovies, setPopularMovies] = useState<PopularMoviesResponse | null>(null);
   const [selectedPage, setSelectedPage] = useState(1);
-  /**
-   * For pagnination...
-   */
   const [page, setPage] = useState(0);
   const moviesPerPage = 20;
   const numberOfRecordsVisited = page * moviesPerPage;
   const totalPagesCalculated = Math.ceil(
-    (topRatedMovies?.total_results || 0) / moviesPerPage
+    (popularMovies?.total_results || 0) / moviesPerPage
   );
 
   const handlePageChange = (providedPage: number) => {
@@ -41,13 +43,13 @@ const TopRated:React.FC = () => {
   useEffect(() => {
     (async function () {
       const {
-        results: topRatedMoviesResults,
+        results: popularMoviesResults,
         total_pages,
         total_results,
-      } = await getTopRatedMovies(selectedPage);
-      topRatedMoviesResults &&
-        setTopRatedMovies({
-          results:topRatedMoviesResults,
+      } = await getPopularMovies(selectedPage);
+      popularMoviesResults &&
+        setPopularMovies({
+          results: popularMoviesResults,
           total_pages,
           total_results,
         });
@@ -60,18 +62,17 @@ const TopRated:React.FC = () => {
         <TopSection>
           <div className="flex flex-col space-y-5 md:space-y-0 md:flex-row md:items-center md:space-x-5 md:justify-between">
             <h2 className="text-3xl uppercase font-AtypDisplayBold">
-              Upcoming Movies
+              Popular Movies
             </h2>
           </div>
 
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5 md:gap-10">
-            {topRatedMovies?.results &&
-            topRatedMovies?.results
+            {popularMovies?.results
               .slice(
                 numberOfRecordsVisited,
                 numberOfRecordsVisited + moviesPerPage
               )
-              ?.map((singlePopularMovie) => {
+              ?.map((singlePopularMovie:any) => {
                 return (
                   <MovieCard
                     key={singlePopularMovie.id}
@@ -92,4 +93,4 @@ const TopRated:React.FC = () => {
   );
 };
 
-export default TopRated;
+export default Upcoming;

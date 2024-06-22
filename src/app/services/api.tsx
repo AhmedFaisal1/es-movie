@@ -1,9 +1,12 @@
 import axios from 'axios';
+import { Movie, Credits, SimilarMovie } from '../types';
 
 const tmdbUrl = "https://api.themoviedb.org/3";
-const tmdbKey = '7b67e0d94c7a1d07c0312bac151d88b0'
+const tmdbKey = '7b67e0d94c7a1d07c0312bac151d88b0';
 
-const axiosClient = axios.create({ baseURL: tmdbUrl });
+const axiosClient = axios.create({
+  baseURL: "https://api.themoviedb.org/3",
+});
 
 const handleAxiosError = (error: unknown) => {
   if (axios.isAxiosError(error) && error.response) {
@@ -34,13 +37,22 @@ export const getPopularMovies = async (page: number) => {
  * Getting the MovieDetails...
  */
 export const getMovieDetails = async (movieId: string) => {
-  const response = await axios.get(`${tmdbUrl}/movie/${movieId}`, {
-    params: {
-      api_key: tmdbKey,
-      language: 'en-US',
-    },
-  });
-  return response.data;
+  const options = {
+    method: 'GET',
+    url: `${tmdbUrl}/movie/${movieId}?language=en-US`,
+    headers: {
+      accept: 'application/json',
+      Authorization: `Bearer ${tmdbKey}`
+    }
+  };
+
+  try {
+    const response = await axios.request(options);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to fetch movie details');
+  }
 };
 /**
  * Getting the top rated movies...
@@ -63,9 +75,9 @@ export const getTopRatedMovies = async (selectedPage: number = 1) => {
 };
 
 /**
- * Getting the upcoming movies...
+ * Getting the latest movies...
  */
-export const getUpcomingMovies = async (selectedPage: number = 1) => {
+export const getUpcomingMovies = async (selectedPage = 1) => {
   try {
     const { data } = await axiosClient({
       method: "get",
@@ -81,7 +93,6 @@ export const getUpcomingMovies = async (selectedPage: number = 1) => {
     return handleAxiosError(error);
   }
 };
-
 /**
  * Getting the trending movies...
  */
@@ -157,7 +168,7 @@ export const getPeople = async (selectedPage: number) => {
 /**
  * Getting the single movie data...
  */
-export const getSingleMovie = async (movieId: number) => {
+export const getSingleMovie = async (movieId: number): Promise<Movie> => {
   try {
     const { data } = await axiosClient({
       method: "get",
@@ -176,7 +187,7 @@ export const getSingleMovie = async (movieId: number) => {
 /**
  * Getting the single movie credits...
  */
-export const getSingleMovieCredits = async (movieId: number) => {
+export const getSingleMovieCredits = async (movieId: number): Promise<Credits> => {
   try {
     const { data } = await axiosClient({
       method: "get",
@@ -195,7 +206,7 @@ export const getSingleMovieCredits = async (movieId: number) => {
 /**
  * Getting the similar movies...
  */
-export const getSimilarMovies = async (movieId: number) => {
+export const getSimilarMovies = async (movieId: number): Promise<{ results: SimilarMovie[] }> => {
   try {
     const { data } = await axiosClient({
       method: "get",
@@ -214,7 +225,7 @@ export const getSimilarMovies = async (movieId: number) => {
 /**
  * Getting the movies on the basis of genres...
  */
-export const getMoviesByGenres = async (genreId:number, selectedPage = 1) => {
+export const getMoviesByGenres = async (genreId: number, selectedPage = 1) => {
   try {
     const { data } = await axiosClient({
       method: "get",
@@ -228,7 +239,8 @@ export const getMoviesByGenres = async (genreId:number, selectedPage = 1) => {
     });
     return data;
   } catch (error) {
-    return handleAxiosError(error);
+    console.error("Error fetching movies by genres:", error);
+    throw error;
   }
 };
 
@@ -252,3 +264,4 @@ export const getSearchedMovie = async (movieTitle: string, selectedPage: number 
     return handleAxiosError(error);
   }
 };
+

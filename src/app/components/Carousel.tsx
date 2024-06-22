@@ -2,32 +2,20 @@
 import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import CarouselItem from "@/app/components/CarouselItem";
-
-/**
- * Swiper Styles
- */
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
-
-/**
- * Swiper Modules
- */
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import {Navigation , EffectFade, Autoplay, Keyboard} from "swiper/modules";
-
-/**
- * React Icons
- */
 import {
   BsFillArrowRightCircleFill,
   BsFillArrowLeftCircleFill,
 } from "react-icons/bs";
 
 interface CarouselProps {
-  moviesList: {
+  moviesList?: {
     id: number;
     backdrop_path: string;
     poster_path: string;

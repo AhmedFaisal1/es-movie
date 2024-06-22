@@ -2,8 +2,6 @@ import React from "react";
 import Link from "next/link";
 import MaxWidthLayout from "./MaxWidthLayout";
 import OtherSection from "./OtherSection";
-import { BsStarFill } from "react-icons/bs";
-import { extractImgPoster } from "../utils/extractImg";
 import MovieCard from "../components/MovieCard";
 
 // Define an interface for the movie object within MovieContainer
@@ -20,7 +18,7 @@ interface MovieContainerMovie {
 // Define an interface for the component props
 interface MovieContainerProps {
   sectionTitle: string;
-  moviesList: MovieContainerMovie[]; // Use the local MovieContainerMovie interface
+  moviesList?: MovieContainerMovie[]; // Use the local MovieContainerMovie interface
   btnText?: string;
   btnLink?: string;
 }
@@ -40,7 +38,7 @@ const MovieContainer: React.FC<MovieContainerProps> = ({
           </h2>
         </div>
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 lg:grid-cols-5 md:gap-10">
-          {moviesList?.map((singlePopularMovie) => (
+          {moviesList.map((singlePopularMovie) => (
             <MovieCard
               singlePopularMovie={{
                 ...singlePopularMovie,

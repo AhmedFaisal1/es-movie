@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const SearchMovie = () => {
   const [query, setQuery] = useState('');
@@ -6,7 +6,7 @@ const SearchMovie = () => {
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (typeof window !== 'undefined' && query.trim() !== '') {
-      window.location.href = `/searchdetail?query=${encodeURIComponent(query)}`;
+      window.location.href = `/pages/searchdetail?query=${encodeURIComponent(query)}`;
     }
   };
 

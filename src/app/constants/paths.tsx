@@ -9,5 +9,5 @@ export const PATH = {
   GENRES: "/genres",
   GENRE: "/genre",
   SEARCH: "/searchdetail",
-  SHOWMOVIE: "/show/movie",
+  SHOWMOVIE: "/show-movie",
 };
