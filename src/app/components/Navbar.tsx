@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
       <div className="w-full flex items-center justify-between space-x-5 p-5 bg-black">
         <Link href="/">
           <h4 className="uppercase font-AtypDisplayBold text-green-500">
-            MovieEBG
+            EskimoTV
           </h4>
         </Link>
         <div className="justify-between w-full space-x-5 hidden lg:flex">
